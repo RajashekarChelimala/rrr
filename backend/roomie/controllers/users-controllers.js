@@ -265,7 +265,7 @@ const updateMe = async (req, res, next) => {
   const user = await User.findById(req.user.id);
   const toUpdate = {
     name: req.body.name || user.name,
-    //email: req.body.email || user.email,
+    email: req.body.email || user.email,
     phone: req.body.phone || user.phone,
     address: req.body.address || user.address,
   };
@@ -299,6 +299,25 @@ const deleteMe = async (req, res, next) => {
   }
 };
 
+const getUserDetailsById = async (req, res, next) => {
+  // console.log(req.user);
+  try {
+    const userDetails = await User.findById(req.user._id);
+    res.json({
+      status: "success",
+      data: userDetails,
+    });
+  } catch (err) {
+    console.log(
+      "Error while getting user details in getUserDetailsById function"
+    );
+    res.status(500).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};
+
 exports.forgotPassword = forgotPassword;
 exports.resetPassword = resetPassword;
 exports.updatePassword = updatePassword;
@@ -307,6 +326,7 @@ exports.deleteMe = deleteMe;
 
 exports.protect = protect;
 
+exports.getUserDetailsById = getUserDetailsById;
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.checkBody = checkBody;

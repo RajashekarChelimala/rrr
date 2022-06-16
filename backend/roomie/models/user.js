@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema({
   phone: { type: Number, minlength: 10 },
   address: { type: String, trim: true },
   rooms: [{ type: mongoose.Types.ObjectId, required: false, ref: "Room" }],
-  image: { type: String },
   passwordResetToken: String,
   passwordResetExpires: Date,
 });

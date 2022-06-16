@@ -9,6 +9,11 @@ router.param("id", (req, res, next, val) => {
   next();
 });
 
+router.get(
+  "/:userId",
+  // usersControllers.protect,
+  usersControllers.getUserDetailsById
+);
 router.get("/", usersControllers.getUsers);
 router.post("/signup", usersControllers.checkBody, usersControllers.signup);
 router.post("/login", usersControllers.login);

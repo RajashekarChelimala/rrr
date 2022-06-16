@@ -38,8 +38,8 @@ const Login = (props) => {
       if (responseData.status === "fail" || !response.ok) {
         throw new Error(responseData.message);
       }
+      auth.login(responseData.userId, responseData.token);
       setIsLoading(false);
-      auth.login();
       navigate("/");
     } catch (err) {
       setIsLoading(false);

@@ -31,3 +31,8 @@
   height: 40px;
   border-radius: 4px;
 }
+
+#MyAccount_Head a {
+  font-weight: bold;
+  text-decoration: none;
+}

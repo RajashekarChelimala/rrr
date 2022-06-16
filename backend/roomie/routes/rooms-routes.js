@@ -4,12 +4,6 @@ const roomsControllers = require("../controllers/rooms-controllers");
 
 const router = express.Router();
 
-// router.post(
-//   "/addnewroom",
-//   roomsControllers.uploadRoomImages,
-//   roomsControllers.createRoom
-// );
-
 router.post(
   "/addnewroom",
   roomsControllers.uploadRoomImages,

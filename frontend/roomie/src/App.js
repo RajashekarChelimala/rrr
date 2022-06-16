@@ -20,11 +20,11 @@ import Test from "./Test";
 import { AuthContext } from "./context/auth-context";
 
 function App() {
-  const [token, setToken] = useState(false);
+  const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(null);
 
   const login = useCallback((uid, token) => {
-    setToken(true);
+    setToken(token);
     setUserId(uid);
   }, []);
 
@@ -63,6 +63,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/myaccount" element={<MyAccount />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/addnewroom" element={<AddNewRoom />} />
         <Route path="/contactus" element={<ContactUs />} />

@@ -1,10 +1,15 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./AddNewRoom.css";
 import ErrorModal from "../UIElements/ErrorModal";
+import SuccessModal from "../UIElements/SuccessModal";
 import LoadingSpinner from "../UIElements/LoadingSpinner";
 
 const AddNewRoom = () => {
-  const [error, setError] = useState();
+  const navigate = useNavigate();
+
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -28,11 +33,6 @@ const AddNewRoom = () => {
 
   const onFormChangeHandler = (e) => {
     const { value, name, type, files } = e.target;
-    // console.log(e);
-    // if (name === "images") {
-    //   console.log(e.target.files);
-    //   console.log(e.target.files);
-    // }
     setForm((state) => ({
       ...state,
       [name]: type === "file" ? files : value,
@@ -40,74 +40,71 @@ const AddNewRoom = () => {
   };
 
   const addNewRoomHandler = async (e) => {
-    //FormData doesn't support FileList Object
     e.preventDefault();
-    // console.log(form);
     const formData = new FormData();
-    // formData.append("title", form.title);
-    // formData.append("room_type", form.room_type);
-    // formData.append("building_type", form.building_type);
-    // formData.append("utilities_included");
-    // formData.append("pets_allowed");
-    // formData.append("rent");
-    // formData.append("address");
-    // formData.append("description");
-    // formData.append("first_date_available");
-    // formData.append("email");
-    // formData.append("phone");
-    // formData.append("images");
-
-    console.log("before >> form data : ", formData);
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
-    for (var key in form) {
-      if (key === "images") {
-        for (let i = 0; i < form[key].length; i++) {
-          console.log("Key : ", key, "Value : ", form[key][i]);
-          formData.append(`${key}[]`, form[key][i]);
-        }
-      } else {
-        formData.append(key, form[key]);
-      }
-    }
-    console.log("after >> form data : ");
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
+    formData.append("title", form.title);
+    formData.append("room_type", form.room_type);
+    formData.append("building_type", form.building_type);
+    formData.append("utilities_included", form.utilities_included);
+    formData.append("pets_allowed", form.pets_allowed);
+    formData.append("rent", form.rent);
+    formData.append("village", form.village);
+    formData.append("city", form.city);
+    formData.append("state", form.state);
+    formData.append("zip", form.zip);
+    formData.append("country", form.country);
+    formData.append("description", form.description);
+    formData.append("first_date_available", form.first_date_available);
+    formData.append("email", form.email);
+    formData.append("phone", form.phone);
+    for (const file of form.images) {
+      formData.append("images", file);
     }
     try {
       setIsLoading(true);
       const response = await fetch(
         "http://localhost:5000/api/rooms/addnewroom",
         {
-          mode: "no-cors",
           method: "POST",
-          body: JSON.stringify(formData),
-          headers: {
-            "Content-Type": "application/json",
-          },
+          body: formData,
         }
       );
       const responseData = await response.json();
       console.log("Response Data : ", responseData);
-      console.log("test");
+      // console.log("test");
       setIsLoading(false);
+      setSuccess(true);
     } catch (err) {
       console.log("Error : ", err);
       setIsLoading(false);
       setError(err.message || "Error While Creating New Room");
     }
+    console.log("end");
   };
 
   const errorHandler = () => {
     setError(null);
   };
 
+  const successHandler = () => {
+    setSuccess(false);
+    navigate("/");
+  };
+
   return (
     <div>
       <ErrorModal error={error} onClear={errorHandler} />
+      <SuccessModal
+        success={success}
+        successMessage="New Listing Created Sucessfully!"
+        onClear={successHandler}
+      />
       {isLoading && <LoadingSpinner asOverlay />}
-      <form onSubmit={addNewRoomHandler} id="addnewroom">
+      <form
+        onSubmit={addNewRoomHandler}
+        id="addnewroom"
+        enctype="multipart/form-data"
+      >
         <h3 id="head">New Listing</h3>
         <div id="Upload">
           <br></br>
@@ -123,26 +120,6 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             multiple
           />
-          {/* <br></br>
-          <br></br>
-          <input
-            type="file"
-            className="file"
-            accept=".jpg,.png,.jpeg"
-            name="images"
-            onChange={onFormChangeHandler}
-          />
-          <br></br>
-          <br></br>
-          <input
-            type="file"
-            className="file"
-            accept=".jpg,.png,.jpeg"
-            name="images"
-            onChange={onFormChangeHandler}
-          />
-          <br></br>
-          <br></br> */}
           <h5> Listing Information:</h5>
           <hr style={{ color: "orange" }}></hr>
           <label>Title:</label>
@@ -365,7 +342,7 @@ const AddNewRoom = () => {
           <br></br>
           <br></br>
           <input
-            type="number"
+            type="tel"
             className="inputUpload"
             name="phone"
             onChange={onFormChangeHandler}

@@ -41,10 +41,9 @@ const upload = multer({
 
 // upload.single("image"); //=>req.file
 // const uploadRoomImages = upload.array("images", 3); // req.files
-const uploadRoomImages = upload.array("images"); // req.files
+const uploadRoomImages = upload.array("images"); // it will automatically adds  req.files
 
 const createRoom = async (req, res, next) => {
-  console.log("REQ FILES : ", req.files);
   let imageFileNames = [];
   req.files.forEach((obj) => {
     imageFileNames.push(obj.filename);
@@ -69,6 +68,7 @@ const createRoom = async (req, res, next) => {
     images: imageFileNames,
   });
   await createdRoom.save();
+
   res.json({
     status: "success",
     data: {
