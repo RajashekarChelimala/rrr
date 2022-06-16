@@ -39,20 +39,12 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-// for different mix of file uploads //=>req.files
-// const uploadRoomImages = upload.fields([
-//   {
-//     name: "",
-//     maxCount: 3,
-//   },
-// ]);
-
 // upload.single("image"); //=>req.file
-const uploadRoomImages = upload.array("images", 3); // req.files
+// const uploadRoomImages = upload.array("images", 3); // req.files
+const uploadRoomImages = upload.array("images"); // req.files
 
 const createRoom = async (req, res, next) => {
-  // console.log(req.files);
-
+  console.log("REQ FILES : ", req.files);
   let imageFileNames = [];
   req.files.forEach((obj) => {
     imageFileNames.push(obj.filename);
@@ -65,7 +57,11 @@ const createRoom = async (req, res, next) => {
     utilities_included: req.body.utilities_included,
     pets_allowed: req.body.pets_allowed,
     rent: req.body.rent,
-    address: req.body.address,
+    village: req.body.village,
+    city: req.body.city,
+    state: req.body.city,
+    zip: req.body.zip,
+    country: req.body.country,
     description: req.body.description,
     first_date_available: req.body.first_date_available,
     email: req.body.email,

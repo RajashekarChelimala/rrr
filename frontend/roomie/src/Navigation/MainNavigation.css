@@ -1,14 +1,3 @@
-/* .logo {
-  padding: 2rem;
-}
-#main_navigation {
-  display: flex;
-}
-
-#main_navigation .logo {
-  float: left;
-} */
-
 .main-navigation__menu-btn {
   width: 3rem;
   height: 3rem;
@@ -25,7 +14,7 @@
   display: block;
   width: 3rem;
   height: 2.5px;
-  background: white;
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .main-navigation__title {
@@ -52,5 +41,7 @@
 
   .main-navigation__header-nav {
     display: block;
+    padding-right: 1%;
+    /* z-index: 2; */
   }
 }

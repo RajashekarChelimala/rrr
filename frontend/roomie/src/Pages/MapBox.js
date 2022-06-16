@@ -64,6 +64,16 @@ const MapBox = (props) => {
         referrerpolicy="no-referrer-when-downgrade"
         title="Map"
       />
+      <iframe
+        src="https://maps.google.com/maps?q=akaram&amp;z=10&amp;output=embed&amp;language=es"
+        width="100%"
+        height="450"
+        style={{ border: 0 }}
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Map"
+      />
     </>
   );
 };

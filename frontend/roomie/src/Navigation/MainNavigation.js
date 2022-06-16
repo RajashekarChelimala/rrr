@@ -3,8 +3,6 @@
 
 // import "./MainNavigation.css";
 
-// import logo from "../assets/images/logo.png";
-
 // const MainNavigation = (props) => {
 //   return (
 //     <div id="main_navigation">
@@ -15,6 +13,7 @@
 // };
 
 // export default MainNavigation;
+import logo from "../assets/images/logo.png";
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -35,7 +34,7 @@ const MainNavigation = (props) => {
   const closeDrawerHandler = () => {
     setDrawerIsOpen(false);
   };
-
+ 
   return (
     <React.Fragment>
       {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
@@ -56,7 +55,10 @@ const MainNavigation = (props) => {
           <span />
         </button>
         <h1 className="main-navigation__title">
-          <Link to="/"> Your Places </Link>
+          <Link to="/">
+            {" "}
+            <img src={logo} className="logo" alt="logo" />
+          </Link>
         </h1>
         <nav className="main-navigation__header-nav">
           <NavLinks />

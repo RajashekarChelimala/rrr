@@ -1,9 +1,16 @@
 import "./SignUp.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/images/signup.jpg";
-import { useState } from "react";
+import { useContext, useState } from "react";
+
+import { AuthContext } from "../context/auth-context";
+
+import ErrorModal from "../UIElements/ErrorModal";
+import LoadingSpinner from "../UIElements/LoadingSpinner";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const auth = useContext(AuthContext);
   let error = false;
   const [name, setName] = useState("");
   const [Mail, setMail] = useState("");
@@ -13,6 +20,9 @@ const SignUp = () => {
   const [PassError, setPassError] = useState(false);
   const [ConfPassError, setConfPassError] = useState(false);
   const [nameError, setNameError] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorModal, setErrorModal] = useState(null);
 
   async function saveUser(e) {
     e.preventDefault();
@@ -46,6 +56,7 @@ const SignUp = () => {
       let data = { name: name, email: Mail, password: Pass };
       // console.log(data);
       try {
+        setIsLoading(true);
         const response = await fetch("http://localhost:5000/api/users/signup", {
           method: "POST",
           body: JSON.stringify(data),
@@ -55,15 +66,31 @@ const SignUp = () => {
         });
         const responseData = await response.json();
         console.log("Response Data : ", responseData);
+        console.log("Response Obj : ", response);
+        if (responseData.status === "fail") {
+          throw new Error(responseData.message);
+        }
+        setIsLoading(false);
+        auth.login();
+        navigate("/");
       } catch (err) {
         console.log("Error : ", err);
+        setErrorModal(err.message || "Something Went wrong while signing up!");
+        setIsLoading(false);
       }
     } else {
       console.log("Error in Sign Up Form");
     }
   }
+
+  const errorHandler = () => {
+    setErrorModal(null);
+  };
+
   return (
     <form>
+      <ErrorModal error={errorModal} onClear={errorHandler} />
+      {isLoading && <LoadingSpinner asOverlay />}
       <div id="container1">
         <div id="d1">
           <div id="signUp_block">

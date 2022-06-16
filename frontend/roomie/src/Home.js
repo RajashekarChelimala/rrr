@@ -14,18 +14,27 @@ const Home = (props) => {
           </p>
           <br></br>
           <br></br>
-          <input
-            type="text"
-            placeholder="Enter a City "
-            id="autocomplete"
-          ></input>
-          {/* <p id="details"></p> */}
-          <button> Search</button>
+          <form className="search_form">
+            <input
+              type="text"
+              placeholder="Enter a City "
+              id="autocomplete"
+            ></input>
+            <i
+              className="fa fa-map-marker iconn"
+              aria-hidden="true"
+              // className="iconn"
+            ></i>
+            <button type="submit" className="search">
+              {" "}
+              Search
+            </button>
+          </form>
           <br></br>
           <br></br>
           <i>All Available Rooms</i>
         </div>
-        <img src={cityscapes} id="homeimg" alt="sd" />
+        <img src={cityscapes} id="homeimg" alt="homepageimg" />
       </div>
     </React.Fragment>
   );

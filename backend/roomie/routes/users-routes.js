@@ -11,7 +11,7 @@ router.param("id", (req, res, next, val) => {
 
 router.get("/", usersControllers.getUsers);
 router.post("/signup", usersControllers.checkBody, usersControllers.signup);
-router.get("/login", usersControllers.login);
+router.post("/login", usersControllers.login);
 
 router.post("/forgotPassword", usersControllers.forgotPassword);
 router.patch("/resetPassword/:token", usersControllers.resetPassword);
