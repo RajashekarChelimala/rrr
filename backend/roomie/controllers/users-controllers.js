@@ -213,6 +213,7 @@ const updatePassword = async (req, res, next) => {
 };
 
 const protect = async (req, res, next) => {
+  // console.log("In protect middle ware (req.body) >> ", req.body);
   //1)Getting Token
   // console.log(req.headers);
   let token = "";
@@ -257,6 +258,7 @@ const protect = async (req, res, next) => {
 };
 
 const updateMe = async (req, res, next) => {
+  // console.log("Req Body : >> ", req.body);
   //1) create error if posts password data
   if (req.body.password) {
     return next(new AppError("This route is not for updating password", 400));
@@ -302,7 +304,8 @@ const deleteMe = async (req, res, next) => {
 const getUserDetailsById = async (req, res, next) => {
   // console.log(req.user);
   try {
-    const userDetails = await User.findById(req.user._id);
+    // const userDetails = await User.findById(req.user._id);
+    const userDetails = await User.findById(req.params.userId);
     res.json({
       status: "success",
       data: userDetails,
