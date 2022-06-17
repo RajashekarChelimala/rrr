@@ -35,11 +35,13 @@ const MyAccount = () => {
     const getUserDetails = async () => {
       try {
         setIsLoading(true);
+        console.log("auth.userId >>>", auth.userId);
         const response = await fetch(
-          // `http://localhost:5000/api/users/${auth.userId}`
-          `http://localhost:5000/api/users/62ab7ee35f02024ed8d3b3d4`
+          `http://localhost:5000/api/users/${auth.userId}`
+          // `http://localhost:5000/api/users/62ab7ee35f02024ed8d3b3d4`
         );
         const responseData = await response.json();
+        console.log("Response Data >>>>", responseData);
         setUserDetails({
           name: responseData.data.name,
           email: responseData.data.email,
@@ -51,7 +53,7 @@ const MyAccount = () => {
       } catch (err) {
         setIsLoading(false);
         setErrorModal(err.message || "Error while fetching user data");
-        console.log("Error while fetching user data", err.message);
+        console.log("Error while fetching user data >>", err.message);
       }
     };
     getUserDetails();
