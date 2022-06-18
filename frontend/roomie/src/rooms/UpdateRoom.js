@@ -43,6 +43,7 @@ const UpdateRoom = () => {
   useEffect(() => {
     const fetchRoom = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(
           `${process.env.REACT_APP_BACKEND_URL}/rooms/${roomId}`
         );
@@ -57,7 +58,13 @@ const UpdateRoom = () => {
         // console.log("room data >> ", responseData.data.room);
         // console.log("form.images>>>>", responseData.data.room.images);
         setSlides(responseData.data.room.images);
+        setIsLoading(false);
       } catch (err) {
+        setIsLoading(false);
+        setError(
+          err.message ||
+            "Error in UpdateRoom Page while fetching Room Deatils by id"
+        );
         console.log(
           "Error in UpdateRoom Page while fetching Room Deatils by id"
         );
@@ -92,30 +99,30 @@ const UpdateRoom = () => {
         formData.append("images", file);
       }
     }
-    // try {
-    //   setIsLoading(true);
-    //   const response = await fetch(
-    //     "http://localhost:5000/api/rooms/addnewroom",
-    //     {
-    //       method: "POST",
-    //       body: formData,
-    //     }
-    //   );
-    //   const responseData = await response.json();
-    //   console.log("Response Data : ", responseData);
-    //   if (responseData.status === "error" || responseData.status === "fail") {
-    //     throw new Error(
-    //       responseData.message || "error while updating room by id"
-    //     );
-    //   }
-    //   // console.log("test");
-    //   setIsLoading(false);
-    //   setSuccess(true);
-    // } catch (err) {
-    //   console.log("Error : ", err);
-    //   setIsLoading(false);
-    //   setError(err.message || "Error While Creating New Room");
-    // }
+    try {
+      setIsLoading(true);
+      console.log("form>>", form);
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/rooms/${roomId}`,
+        {
+          method: "PATCH",
+          body: formData,
+        }
+      );
+      const responseData = await response.json();
+      console.log("Response Data : ", responseData);
+      if (responseData.status === "error" || responseData.status === "fail") {
+        throw new Error(
+          responseData.message || "error while updating room by id"
+        );
+      }
+      setIsLoading(false);
+      setSuccess(true);
+    } catch (err) {
+      console.log("Error : ", err);
+      setIsLoading(false);
+      setError(err.message || "Error While Creating New Room");
+    }
   };
 
   const onFormChangeHandler = (e) => {
@@ -146,7 +153,7 @@ const UpdateRoom = () => {
       <ErrorModal error={error} onClear={errorHandler} />
       <SuccessModal
         success={success}
-        successMessage="New Listing Created Sucessfully!"
+        successMessage="Listing Details Updated Successfully!"
         onClear={successHandler}
       />
       {isLoading && <LoadingSpinner asOverlay />}
@@ -169,7 +176,7 @@ const UpdateRoom = () => {
         <h3 id="head">Update Listing</h3>
         <div id="Upload">
           <br></br>
-          <span id="imgUpload">images:</span>
+          <span id="imgUpload">Update images Here :</span>
           <br></br>
           <br></br>
           <input

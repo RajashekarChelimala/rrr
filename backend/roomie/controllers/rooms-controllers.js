@@ -89,6 +89,59 @@ const createRoom = async (req, res, next) => {
   });
 };
 
+const updateRoomById = async (req, res, next) => {
+  const to_update = {
+    title: req.body.title,
+    room_type: req.body.room_type,
+    building_type: req.body.building_type,
+    utilities_included: req.body.utilities_included,
+    pets_allowed: req.body.pets_allowed,
+    rent: req.body.rent,
+    village: req.body.village,
+    city: req.body.city,
+    state: req.body.city,
+    zip: req.body.zip,
+    country: req.body.country,
+    description: req.body.description,
+    first_date_available: req.body.first_date_available,
+    email: req.body.email,
+    phone: req.body.phone,
+  };
+
+  let imageFileNames = [];
+  req.files.forEach((obj) => {
+    imageFileNames.push(obj.filename);
+  });
+  if (imageFileNames.length === 0) {
+    // delete
+    console.log("zero images");
+  } else {
+    console.log("non zero images");
+    to_update.images = imageFileNames;
+  }
+
+  try {
+    const room = await Room.findByIdAndUpdate(req.params.roomId, to_update, {
+      new: true, // to return newly updated document to client
+      runValidators: true,
+    });
+
+    if (!room) {
+      return next(new AppError("No Room Found with given ID", 404));
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: room,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
 const getAllRooms = async (req, res, next) => {
   try {
     // 1A) Filtering
@@ -182,29 +235,6 @@ const getRoomsByUserId = async (req, res, next) => {
     res.json({
       status: "success",
       data: rooms,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
-
-const updateRoomById = async (req, res, next) => {
-  try {
-    const room = await Room.findByIdAndUpdate(req.params.roomId, req.body, {
-      new: true, // to return newly updated document to client
-      runValidators: true,
-    });
-
-    if (!room) {
-      return next(new AppError("No Room Found with given ID", 404));
-    }
-
-    res.status(200).json({
-      status: "success",
-      data: room,
     });
   } catch (err) {
     res.status(404).json({

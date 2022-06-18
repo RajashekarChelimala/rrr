@@ -10,6 +10,12 @@ router.post(
   roomsControllers.createRoom
 );
 
+router.patch(
+  "/:roomId",
+  roomsControllers.uploadRoomImages,
+  roomsControllers.updateRoomById
+);
+
 router
   .route("/top-5-cheap")
   .get(roomsControllers.aliasTopRooms, roomsControllers.getAllRooms);
@@ -17,7 +23,6 @@ router
 router.get("/allrooms", roomsControllers.getAllRooms);
 router.get("/:roomId", roomsControllers.getRoomById);
 router.get("/rooms/:userId", roomsControllers.getRoomsByUserId);
-router.patch("/:roomId", roomsControllers.updateRoomById);
 router.delete(
   "/:roomId",
   roomsControllers.protect,
