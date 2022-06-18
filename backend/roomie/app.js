@@ -37,6 +37,7 @@ if (process.env.NODE_ENV === "development") {
 }
 // app.use(morgan("tiny"));
 // app.use(express.static(`${__dirname}/routes`));
+app.use(express.static(`${__dirname}/public`));
 
 const usersRoutes = require("./routes/users-routes");
 const roomsRoutes = require("./routes/rooms-routes");

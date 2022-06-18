@@ -1,26 +1,32 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import "./AddNewRoom.css";
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
 import ErrorModal from "../UIElements/ErrorModal";
-import SuccessModal from "../UIElements/SuccessModal";
 import LoadingSpinner from "../UIElements/LoadingSpinner";
+import SuccessModal from "../UIElements/SuccessModal";
+
+import ImageSlider from "../ImageComponents/ImageSlider";
+
 import { AuthContext } from "../context/auth-context";
 
-const AddNewRoom = () => {
+const UpdateRoom = () => {
   const auth = useContext(AuthContext);
+
+  const roomId = useParams().roomId;
 
   const navigate = useNavigate();
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [slides, setSlides] = useState([]);
 
   const [form, setForm] = useState({
     title: "",
-    room_type: "Private",
-    building_type: "Apartment",
-    utilities_included: "No",
-    pets_allowed: "Yes",
+    room_type: "",
+    building_type: "",
+    utilities_included: "",
+    pets_allowed: "",
     rent: "",
     village: "",
     city: "",
@@ -34,15 +40,33 @@ const AddNewRoom = () => {
     images: "",
   });
 
-  const onFormChangeHandler = (e) => {
-    const { value, name, type, files } = e.target;
-    setForm((state) => ({
-      ...state,
-      [name]: type === "file" ? files : value,
-    }));
-  };
+  useEffect(() => {
+    const fetchRoom = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/rooms/${roomId}`
+        );
+        const responseData = await response.json();
+        // console.log("Response >> ", response);
+        // console.log("ResponseData >> ", responseData);
+        // console.log("ResponseData room>> ", responseData.data);
+        setForm(responseData.data.room);
+        setForm((state) => {
+          return { ...state, images: "" };
+        });
+        // console.log("room data >> ", responseData.data.room);
+        // console.log("form.images>>>>", responseData.data.room.images);
+        setSlides(responseData.data.room.images);
+      } catch (err) {
+        console.log(
+          "Error in UpdateRoom Page while fetching Room Deatils by id"
+        );
+      }
+    };
+    fetchRoom();
+  }, [roomId]);
 
-  const addNewRoomHandler = async (e) => {
+  const updateRoomHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", form.title);
@@ -61,29 +85,45 @@ const AddNewRoom = () => {
     formData.append("email", form.email);
     formData.append("phone", form.phone);
     formData.append("creator", auth.userId);
-    for (const file of form.images) {
-      formData.append("images", file);
+
+    if (form.images) {
+      // which means to update images
+      for (const file of form.images) {
+        formData.append("images", file);
+      }
     }
-    try {
-      setIsLoading(true);
-      const response = await fetch(
-        "http://localhost:5000/api/rooms/addnewroom",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const responseData = await response.json();
-      console.log("Response Data : ", responseData);
-      // console.log("test");
-      setIsLoading(false);
-      setSuccess(true);
-    } catch (err) {
-      console.log("Error : ", err);
-      setIsLoading(false);
-      setError(err.message || "Error While Creating New Room");
-    }
-    console.log("end");
+    // try {
+    //   setIsLoading(true);
+    //   const response = await fetch(
+    //     "http://localhost:5000/api/rooms/addnewroom",
+    //     {
+    //       method: "POST",
+    //       body: formData,
+    //     }
+    //   );
+    //   const responseData = await response.json();
+    //   console.log("Response Data : ", responseData);
+    //   if (responseData.status === "error" || responseData.status === "fail") {
+    //     throw new Error(
+    //       responseData.message || "error while updating room by id"
+    //     );
+    //   }
+    //   // console.log("test");
+    //   setIsLoading(false);
+    //   setSuccess(true);
+    // } catch (err) {
+    //   console.log("Error : ", err);
+    //   setIsLoading(false);
+    //   setError(err.message || "Error While Creating New Room");
+    // }
+  };
+
+  const onFormChangeHandler = (e) => {
+    const { value, name, type, files } = e.target;
+    setForm((state) => ({
+      ...state,
+      [name]: type === "file" ? files : value,
+    }));
   };
 
   const errorHandler = () => {
@@ -95,6 +135,12 @@ const AddNewRoom = () => {
     navigate("/");
   };
 
+  const containerStyles = {
+    width: "500px",
+    height: "280px",
+    margin: "0 auto",
+  };
+
   return (
     <div>
       <ErrorModal error={error} onClear={errorHandler} />
@@ -104,12 +150,23 @@ const AddNewRoom = () => {
         onClear={successHandler}
       />
       {isLoading && <LoadingSpinner asOverlay />}
+
+      <div style={{ paddingBottom: "30px" }}>
+        <h3>Previously Uploaded Images: </h3>
+        <div style={containerStyles}>
+          <ImageSlider
+            slides={slides}
+            prePath={`${process.env.REACT_APP_ASSET_URL}/img/rooms`}
+          />
+        </div>
+      </div>
+
       <form
-        onSubmit={addNewRoomHandler}
+        onSubmit={updateRoomHandler}
         id="addnewroom"
         enctype="multipart/form-data"
       >
-        <h3 id="head">New Listing</h3>
+        <h3 id="head">Update Listing</h3>
         <div id="Upload">
           <br></br>
           <span id="imgUpload">images:</span>
@@ -119,7 +176,6 @@ const AddNewRoom = () => {
             type="file"
             className="file"
             accept=".jpg,.png,.jpeg"
-            required
             name="images"
             onChange={onFormChangeHandler}
             multiple
@@ -136,6 +192,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="Enter Titile"
             required
+            value={form.title}
           />
           <br></br>
           <br></br>
@@ -234,6 +291,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="Enter Rent for Month"
             required
+            value={form.rent}
           />
           <br></br>
           <br></br>
@@ -247,6 +305,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="Please Enter Village"
             required
+            value={form.village}
           />
           <br></br>
           <br></br>
@@ -260,6 +319,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="Please Enter City "
             required
+            value={form.city}
           />
           <br></br>
           <br></br>
@@ -273,6 +333,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="Please Enter State"
             required
+            value={form.state}
           />
           <br></br>
           <br></br>
@@ -286,6 +347,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="Please Enter Zip Code"
             required
+            value={form.zip}
           />
           <br></br>
           <br></br>
@@ -299,6 +361,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="Please Enter Country"
             required
+            value={form.country}
           />
           <br></br>
           <br></br>
@@ -312,6 +375,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="Enter Description "
             required
+            value={form.description}
           />
           <br></br>
           <br></br>
@@ -324,6 +388,7 @@ const AddNewRoom = () => {
             name="first_date_available"
             onChange={onFormChangeHandler}
             required
+            value={form.first_date_available.split("T")[0]}
           />
           <br></br>
           <br></br>
@@ -339,6 +404,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="email@email.com"
             required
+            value={form.email}
           />
           <br></br>
           <br></br>
@@ -352,6 +418,7 @@ const AddNewRoom = () => {
             onChange={onFormChangeHandler}
             placeholder="Enter Phone Number"
             required
+            value={form.phone}
           />
           <br></br>
           <br></br>
@@ -363,5 +430,4 @@ const AddNewRoom = () => {
     </div>
   );
 };
-
-export default AddNewRoom;
+export default UpdateRoom;

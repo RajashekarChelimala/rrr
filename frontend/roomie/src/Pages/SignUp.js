@@ -71,7 +71,7 @@ const SignUp = () => {
           throw new Error(responseData.message);
         }
         setIsLoading(false);
-        auth.login();
+        auth.login(responseData.data.user._id, responseData.token);
         navigate("/");
       } catch (err) {
         console.log("Error : ", err);

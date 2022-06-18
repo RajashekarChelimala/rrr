@@ -18,6 +18,10 @@ import MyAccount from "./Pages/MyAccount";
 import Test from "./Test";
 
 import { AuthContext } from "./context/auth-context";
+import MyRooms from "./rooms/MyRooms";
+
+import RoomCard from "./rooms/RoomCard";
+import UpdateRoom from "./rooms/UpdateRoom";
 
 let logoutTimer;
 
@@ -83,9 +87,11 @@ function App() {
         <Route path="/addnewroom" element={<AddNewRoom />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/myaccount" element={<MyAccount />} />
-        <Route path="/test" element={<Test />} />
+        <Route path="/myrooms" element={<MyRooms />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
         <Route
           path="/map"
           element={
@@ -106,9 +112,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/myaccount" element={<MyAccount />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/addnewroom" element={<AddNewRoom />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/testroomcard" element={<RoomCard />} />
+        <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
+
         <Route
           path="*"
           element={

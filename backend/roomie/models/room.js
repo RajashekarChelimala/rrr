@@ -17,6 +17,7 @@ const roomSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: Number, minlength: 10, required: true },
   images: [String],
+  creator: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
 });
 
 module.exports = mongoose.model("Room", roomSchema);

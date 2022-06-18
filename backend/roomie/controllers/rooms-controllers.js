@@ -65,9 +65,21 @@ const createRoom = async (req, res, next) => {
     first_date_available: req.body.first_date_available,
     email: req.body.email,
     phone: req.body.phone,
+    creator: req.body.creator,
     images: imageFileNames,
   });
-  await createdRoom.save();
+
+  try {
+    await createdRoom.save();
+    await User.findOneAndUpdate(
+      { _id: req.body.creator },
+      { $push: { rooms: createdRoom } }
+    );
+  } catch (err) {
+    return next(
+      new Error("Error While Inserting Created Room Id in Users Room Array!")
+    );
+  }
 
   res.json({
     status: "success",
@@ -163,11 +175,14 @@ const getRoomById = async (req, res, next) => {
 
 const getRoomsByUserId = async (req, res, next) => {
   const userId = req.params.userId;
-  let places;
+  let rooms;
   try {
-    places = await User.findById(userId);
-    console.log(places);
-    res.send("DONE");
+    rooms = await User.findById(userId).populate("rooms");
+    console.log(rooms);
+    res.json({
+      status: "success",
+      data: rooms,
+    });
   } catch (err) {
     res.status(404).json({
       status: "fail",
