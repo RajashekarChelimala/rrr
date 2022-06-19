@@ -6,12 +6,14 @@ const router = express.Router();
 
 router.post(
   "/addnewroom",
+  roomsControllers.protect,
   roomsControllers.uploadRoomImages,
   roomsControllers.createRoom
 );
 
 router.patch(
   "/:roomId",
+  roomsControllers.protect,
   roomsControllers.uploadRoomImages,
   roomsControllers.updateRoomById
 );

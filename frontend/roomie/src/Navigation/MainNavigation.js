@@ -1,18 +1,3 @@
-// import React from "react";
-// import NavBar from "./NavBar";
-
-// import "./MainNavigation.css";
-
-// const MainNavigation = (props) => {
-//   return (
-//     <div id="main_navigation">
-//       <img src={logo} className="logo" alt="logo" />
-//       <NavBar />
-//     </div>
-//   );
-// };
-
-// export default MainNavigation;
 import logo from "../assets/images/logo.png";
 
 import React, { useState } from "react";
@@ -34,7 +19,7 @@ const MainNavigation = (props) => {
   const closeDrawerHandler = () => {
     setDrawerIsOpen(false);
   };
- 
+
   return (
     <React.Fragment>
       {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}

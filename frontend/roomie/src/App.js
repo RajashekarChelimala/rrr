@@ -22,6 +22,7 @@ import MyRooms from "./rooms/MyRooms";
 
 import RoomCard from "./rooms/RoomCard";
 import UpdateRoom from "./rooms/UpdateRoom";
+import RoomDetails from "./rooms/RoomDetails";
 
 let logoutTimer;
 
@@ -87,21 +88,11 @@ function App() {
         <Route path="/addnewroom" element={<AddNewRoom />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/myaccount" element={<MyAccount />} />
-        <Route path="/myrooms" element={<MyRooms />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/test" element={<Test />} />
         <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
-        <Route
-          path="/map"
-          element={
-            <MapBox
-              address="shaligouraram"
-              origin="basar"
-              destination="nizamabad"
-            />
-          }
-        />
+        <Route path="/roomdetails/:roomId" element={<RoomDetails />} />
+        <Route path="/updatepassword" element={<MyRooms />} />
+        <Route path="/forgotpassword" element={<MyRooms />} />
+        <Route path="*" element={<h1>Route Not Found</h1>} />
       </Routes>
     );
   } else {
@@ -110,13 +101,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/myaccount" element={<MyAccount />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/test" element={<Test />} />
         <Route path="/testroomcard" element={<RoomCard />} />
-        <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
-
+        <Route path="/roomdetails/:roomId" element={<RoomDetails />} />
         <Route
           path="*"
           element={
@@ -126,16 +115,6 @@ function App() {
               <p>Error</p>
               <p>Error</p>
             </h1>
-          }
-        />
-        <Route
-          path="/map"
-          element={
-            <MapBox
-              address="shaligouraram"
-              origin="basar"
-              destination="nakrekal"
-            />
           }
         />
       </Routes>

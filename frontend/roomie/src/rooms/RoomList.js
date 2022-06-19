@@ -5,11 +5,11 @@ const RoomList = (props) => {
     return <h1>No Rooms !</h1>;
   }
   return (
-    <ul>
+    <ul style={{ display: "flex", listStyle: "none" }}>
       {props.items.map((room) => (
         <RoomCard
-          key={room.id}
-          id={room.id}
+          key={room._id}
+          id={room._id}
           title={room.title}
           room_type={room.room_type}
           building_type={room.building_type}

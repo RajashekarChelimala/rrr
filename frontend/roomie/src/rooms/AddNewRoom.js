@@ -71,6 +71,9 @@ const AddNewRoom = () => {
         {
           method: "POST",
           body: formData,
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
         }
       );
       const responseData = await response.json();

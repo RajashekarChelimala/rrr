@@ -35,12 +35,6 @@ const MyRooms = () => {
     getRooms();
   }, [auth.userId]);
 
-  const roomDeletedHandler = (deletedRoomId) => {
-    setLoadedRooms((prevRoom) =>
-      prevRoom.filter((room) => room.id !== deletedRoomId)
-    );
-  };
-
   const clearError = () => {
     setError(false);
   };
@@ -49,9 +43,7 @@ const MyRooms = () => {
     <>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner />}
-      {!isLoading && loadedRooms && (
-        <RoomList items={loadedRooms} onDeletePlace={roomDeletedHandler} />
-      )}
+      {!isLoading && loadedRooms && <RoomList items={loadedRooms} />}
     </>
   );
 };

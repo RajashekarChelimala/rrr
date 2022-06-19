@@ -2,10 +2,12 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 const Room = require("../models/room");
 const User = require("../models/user");
 const AppError = require("../utils/appError");
+const { fstat } = require("fs");
 
 const aliasTopRooms = (req, res, next) => {
   req.query.limit = "5";
@@ -58,21 +60,21 @@ const createRoom = async (req, res, next) => {
     rent: req.body.rent,
     village: req.body.village,
     city: req.body.city,
-    state: req.body.city,
+    state: req.body.state,
     zip: req.body.zip,
     country: req.body.country,
     description: req.body.description,
     first_date_available: req.body.first_date_available,
     email: req.body.email,
     phone: req.body.phone,
-    creator: req.body.creator,
+    creator: req.user._id,
     images: imageFileNames,
   });
 
   try {
     await createdRoom.save();
     await User.findOneAndUpdate(
-      { _id: req.body.creator },
+      { _id: req.user._id },
       { $push: { rooms: createdRoom } }
     );
   } catch (err) {
@@ -214,9 +216,7 @@ const getRoomById = async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      data: {
-        room: room,
-      },
+      data: room,
     });
   } catch (err) {
     res.status(404).json({
@@ -245,22 +245,53 @@ const getRoomsByUserId = async (req, res, next) => {
 };
 
 const deleteRoomById = async (req, res, next) => {
+  let roomToDelete;
   try {
-    const room = await Room.findByIdAndDelete(req.params.roomId);
+    roomToDelete = await Room.findById(req.params.roomId);
+  } catch (err) {
+    return next(new AppError("No Room Found with given ID", 404));
+  }
 
-    if (!room) {
-      return next(new AppError("No Room Found with given ID", 404));
-    }
-    res.json({
-      status: "success",
-      data: room,
-    });
+  console.log("room To Delete >>> ", roomToDelete);
+  let room;
+  try {
+    room = await Room.findByIdAndDelete(req.params.roomId);
   } catch (err) {
     res.status(404).json({
       status: "fail",
-      message: err,
+      message: err.message || "Error While Deleting Room",
     });
   }
+
+  try {
+    await User.findOneAndUpdate(
+      { _id: roomToDelete.creator },
+      { $pull: { rooms: roomToDelete._id } }
+    );
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err.message || "Error While poppig room id from user document",
+    });
+  }
+
+  // deleting uploaded room Images
+  if (process.env.ROOM_IMG_FILE_PATH) {
+    for (let img_file of roomToDelete.images) {
+      fs.unlink(`${process.env.ROOM_IMG_FILE_PATH}${img_file}`, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+  } else {
+    console.log("Please Configure Path to files in env");
+  }
+
+  res.json({
+    status: "success",
+    data: room,
+  });
 };
 
 const protect = async (req, res, next) => {

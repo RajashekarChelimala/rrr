@@ -12,7 +12,7 @@ import { AuthContext } from "../context/auth-context";
 const UpdateRoom = () => {
   const auth = useContext(AuthContext);
 
-  const roomId = useParams().roomId;
+  const { roomId } = useParams();
 
   const navigate = useNavigate();
 
@@ -48,16 +48,16 @@ const UpdateRoom = () => {
           `${process.env.REACT_APP_BACKEND_URL}/rooms/${roomId}`
         );
         const responseData = await response.json();
-        // console.log("Response >> ", response);
-        // console.log("ResponseData >> ", responseData);
-        // console.log("ResponseData room>> ", responseData.data);
-        setForm(responseData.data.room);
+        console.log("Response >> ", response);
+        console.log("ResponseData >> ", responseData);
+        console.log("ResponseData room>> ", responseData.data);
+        setForm(responseData.data);
         setForm((state) => {
           return { ...state, images: "" };
         });
         // console.log("room data >> ", responseData.data.room);
         // console.log("form.images>>>>", responseData.data.room.images);
-        setSlides(responseData.data.room.images);
+        setSlides(responseData.data.images);
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
@@ -107,6 +107,9 @@ const UpdateRoom = () => {
         {
           method: "PATCH",
           body: formData,
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
         }
       );
       const responseData = await response.json();

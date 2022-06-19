@@ -104,7 +104,7 @@ const MyAccount = () => {
       {isLoading && <LoadingSpinner asOverlay />}
       <div id="MyAccount_Head">
         <h3>Update My Account :</h3>
-        <Link to={"/UpdatePassword"}>Update Password </Link>
+        <Link to={"/updatepassword"}>Update Password </Link>
       </div>
       <div id="MyAccount">
         <form onSubmit={formSubmitHandler}>

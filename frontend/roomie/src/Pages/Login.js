@@ -64,7 +64,7 @@ const Login = (props) => {
           </b>
           <p className="S1">
             Don't have an account ?{" "}
-            <Link to={"/SignUp"} id="snv">
+            <Link to={"/signup"} id="snv">
               {" "}
               SignUp{" "}
             </Link>
@@ -88,7 +88,7 @@ const Login = (props) => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <br></br>
-              <Link id="FPP" as={Link} to={"/ForgetPassword"}>
+              <Link id="FPP" as={Link} to={"/forgotpassword"}>
                 Forgot Password?
               </Link>
               <br></br>

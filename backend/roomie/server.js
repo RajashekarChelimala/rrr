@@ -9,7 +9,6 @@ const app = require("./app");
 // console.log(process.env);
 // console.log(process.env.PORT);
 console.log("ENVIRONMENT = " + process.env.NODE_ENV);
-
 mongoose
   .connect(
     process.env.DATABASE_LOCAL,

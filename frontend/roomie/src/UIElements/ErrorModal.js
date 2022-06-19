@@ -14,6 +14,6 @@ const ErrorModal = (props) => {
       <p>{props.error}</p>
     </Modal>
   );
-};
+}; 
 
 export default ErrorModal;
