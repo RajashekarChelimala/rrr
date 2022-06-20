@@ -98,6 +98,7 @@ const login = async (req, res, next) => {
 };
 
 const forgotPassword = async (req, res, next) => {
+  // console.log(">>", req.body.email);
   // 1) Get user on posted email
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
@@ -110,9 +111,10 @@ const forgotPassword = async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // 3)  Send it to users Email
-  const resetURL = `${req.protocol}://${req.get(
-    "host"
-  )}/api/users/resetPassword/${resetToken}`;
+  // const resetURL = `${req.protocol}://${req.get(
+  //   "host"
+  // )}/api/users/resetPassword/${resetToken}`;
+  const resetURL = `${process.env.REACT_APP_URL}/resetpassword/${resetToken}`;
 
   // console.log(resetURL);
   const message = `Forgot Your Password ? Submit a PATCH request with your new Password to : ${resetURL}.\nIf you didn't forgot your password,please ignore this email!`;

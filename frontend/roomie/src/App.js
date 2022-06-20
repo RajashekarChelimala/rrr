@@ -25,6 +25,8 @@ import UpdateRoom from "./rooms/UpdateRoom";
 import RoomDetails from "./rooms/RoomDetails";
 
 import UpdatePassword from "./Pages/UpdatePassword";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
 
 let logoutTimer;
 
@@ -93,7 +95,7 @@ function App() {
         <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
         <Route path="/roomdetails/:roomId" element={<RoomDetails />} />
         <Route path="/updatepassword" element={<UpdatePassword />} />
-        <Route path="/forgotpassword" element={<MyRooms />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="*" element={<h1>Route Not Found</h1>} />
       </Routes>
     );
@@ -108,6 +110,8 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/testroomcard" element={<RoomCard />} />
         <Route path="/roomdetails/:roomId" element={<RoomDetails />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/resetpassword/:token" element={<ResetPassword />} />
         <Route
           path="*"
           element={
