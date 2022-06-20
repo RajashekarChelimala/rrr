@@ -4,6 +4,8 @@ const express = require("express");
 const app = express(); // will add bunch of methods to app
 const morgan = require("morgan"); // HTTP request Logger
 
+const cors = require("cors");
+
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 

@@ -24,6 +24,8 @@ import RoomCard from "./rooms/RoomCard";
 import UpdateRoom from "./rooms/UpdateRoom";
 import RoomDetails from "./rooms/RoomDetails";
 
+import UpdatePassword from "./Pages/UpdatePassword";
+
 let logoutTimer;
 
 function App() {
@@ -90,7 +92,7 @@ function App() {
         <Route path="/myaccount" element={<MyAccount />} />
         <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
         <Route path="/roomdetails/:roomId" element={<RoomDetails />} />
-        <Route path="/updatepassword" element={<MyRooms />} />
+        <Route path="/updatepassword" element={<UpdatePassword />} />
         <Route path="/forgotpassword" element={<MyRooms />} />
         <Route path="*" element={<h1>Route Not Found</h1>} />
       </Routes>

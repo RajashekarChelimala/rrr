@@ -15,5 +15,5 @@ const SuccessModal = (props) => {
     </Modal>
   );
 };
-
+ 
 export default SuccessModal;
